@@ -1,4 +1,7 @@
-type colorScheme = 'light' | 'dark' | 'auto';
+type colorScheme = 'light' | 'dark' | 'auto' | 'h4ck3r';
+const colorSchemes = [
+    'light', 'dark', 'auto', 'h4ck3r'
+]
 
 class StackColorScheme {
     private localStorageKey = 'StackColorScheme';
@@ -47,6 +50,10 @@ class StackColorScheme {
         return (this.currentScheme == 'dark' || this.currentScheme == 'auto' && this.systemPreferScheme == 'dark');
     }
 
+    private isH4ck3r() {
+        return this.currentScheme == 'h4ck3r';
+    }
+
     private dispatchEvent(colorScheme: colorScheme) {
         const event = new CustomEvent('onColorSchemeChange', {
             detail: colorScheme
@@ -58,6 +65,9 @@ class StackColorScheme {
         if (this.isDark()) {
             document.documentElement.dataset.scheme = 'dark';
         }
+        else if (this.isH4ck3r()) {
+            document.documentElement.dataset.scheme = 'h4ck3r';
+        }
         else {
             document.documentElement.dataset.scheme = 'light';
         }
@@ -67,8 +77,7 @@ class StackColorScheme {
 
     private getSavedScheme(): colorScheme {
         const savedScheme = localStorage.getItem(this.localStorageKey);
-
-        if (savedScheme == 'light' || savedScheme == 'dark' || savedScheme == 'auto') return savedScheme;
+        if (colorSchemes.includes(savedScheme)) return savedScheme as colorScheme;
         else return 'auto';
     }
 
